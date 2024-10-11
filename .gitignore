@@ -1,0 +1,69 @@
+# Ignore all the target directory
+/target/
+
+# Ignore Maven wrapper
+.mvn/
+!/.mvn/wrapper/maven-wrapper.jar
+
+# Ignore Maven-specific files
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+
+# Ignore IntelliJ IDEA files
+.idea/
+*.iml
+*.ipr
+*.iws
+out/
+
+# Ignore Eclipse/STS files
+.project
+.classpath
+.settings/
+.springBeans
+
+# Ignore VSCode files
+.vscode/
+
+# Ignore logs and temp files
+*.log
+*.tmp
+*.bak
+*.swp
+
+# Ignore OS generated files
+.DS_Store
+Thumbs.db
+
+# Ignore node_modules folder for Angular
+frontend/node_modules/
+node_modules/
+# Ignore Angular build directory
+frontend/dist/
+
+# Ignore npm debug and package-lock files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+
+# Ignore environment configuration files
+frontend/src/environments/environment*.ts
+
+# Ignore AWS config (if any)
+.aws/
+
+# Ignore MySQL dumps and database backups
+*.sql
+*.db
+
+# Ignore generated coverage reports
+coverage/
+test-results/
+
+# Ignore IDEA, Eclipse, and VS Code workspace files (if using any of these IDEs)
+*.ws
+
