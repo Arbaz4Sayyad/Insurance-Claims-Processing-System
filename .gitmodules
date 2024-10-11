@@ -1,0 +1,3 @@
+[submodule "IES-UI"]
+   path = IES-UI
+   url = https://github.com/Arbaz4Sayyad/HIS.git
