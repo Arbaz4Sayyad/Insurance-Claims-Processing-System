@@ -1,12 +1,12 @@
 # Insurance Eligibility System (IES)
 
 ## Project Overview
-The **Insurance Eligibility System (IES)** was developed for the New Jersey (NJ) State Government to provide fully integrated health and insurance plans for NJ citizens based on their life circumstances. This intranet-based system is accessible exclusively by DHS (Department of Human Services) offices, where case workers assist citizens in applying for various government plans.
+The **Insurance Eligibility System (IES)** was developed to provide fully integrated health and insurance plans for the citizens based on their circumstances. This intranet-based system is accessible exclusively by DHS (Department of Human Services) offices, where case workers assist citizens in applying for various government plans.
 
 ## Key Features
 The system offers several plans:
 - **SNAP**: A food assistance program for citizens with no or low income.
-- **CCAP**: A childcare assistance program for families with low income.
+- **CCAP**: A childcare assistance program for low-income families.
 - **Medicaid**: A health plan for people with limited income.
 - **Medicare**: A health plan for citizens aged 65 and above.
 - **QHP**: A commercial health plan that citizens can purchase.
