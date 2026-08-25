@@ -154,6 +154,7 @@ services:
   config-server:
     build:
       context: .
+      dockerfile: Dockerfile.module
       args:
         MODULE: config-server
     container_name: config-server
@@ -175,6 +176,7 @@ services:
   discovery-server:
     build:
       context: .
+      dockerfile: Dockerfile.module
       args:
         MODULE: discovery-server
     container_name: discovery-server
@@ -197,6 +199,7 @@ services:
   api-gateway:
     build:
       context: .
+      dockerfile: Dockerfile.module
       args:
         MODULE: api-gateway
     container_name: api-gateway
@@ -216,6 +219,7 @@ services:
   user-service:
     build:
       context: .
+      dockerfile: Dockerfile.module
       args:
         MODULE: user-service
     container_name: user-service
@@ -236,6 +240,7 @@ services:
   ar-service:
     build:
       context: .
+      dockerfile: Dockerfile.module
       args:
         MODULE: ar-service
     container_name: ar-service
@@ -260,6 +265,7 @@ services:
   dc-service:
     build:
       context: .
+      dockerfile: Dockerfile.module
       args:
         MODULE: dc-service
     container_name: dc-service
@@ -284,6 +290,7 @@ services:
   ed-service:
     build:
       context: .
+      dockerfile: Dockerfile.module
       args:
         MODULE: ed-service
     container_name: ed-service
@@ -309,6 +316,7 @@ services:
   co-service:
     build:
       context: .
+      dockerfile: Dockerfile.module
       args:
         MODULE: co-service
     container_name: co-service
@@ -332,6 +340,7 @@ services:
   bi-service:
     build:
       context: .
+      dockerfile: Dockerfile.module
       args:
         MODULE: bi-service
     container_name: bi-service
@@ -355,6 +364,7 @@ services:
   analytics-service:
     build:
       context: .
+      dockerfile: Dockerfile.module
       args:
         MODULE: analytics-service
     container_name: analytics-service
@@ -378,6 +388,7 @@ services:
   dashboard-aggregator:
     build:
       context: .
+      dockerfile: Dockerfile.module
       args:
         MODULE: dashboard-aggregator
     container_name: dashboard-aggregator

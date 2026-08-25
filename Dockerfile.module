@@ -1,0 +1,12 @@
+# Single module runtime stage for Docker Compose
+FROM eclipse-temurin:17-jre-alpine
+WORKDIR /app
+
+RUN apk add --no-cache curl && \
+    addgroup -S hisgroup && adduser -S hisuser -G hisgroup
+USER hisuser
+
+ARG MODULE
+COPY ${MODULE}/target/*.jar app.jar
+
+ENTRYPOINT ["java", "-jar", "app.jar"]

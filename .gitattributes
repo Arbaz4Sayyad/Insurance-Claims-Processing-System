@@ -16,7 +16,5 @@ package.json linguist-vendored
 *.class linguist-vendored
 *.log linguist-vendored
 
-# Ignore other config or generated files
-*.xml linguist-vendored
-*.yml linguist-vendored
-*.properties linguist-vendored
+# Shell scripts line endings
+*.sh text eol=lf

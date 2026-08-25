@@ -1,0 +1,42 @@
+{
+  "name": "Claims Processing System (IECS)",
+  "image": "mcr.microsoft.com/devcontainers/java:1-17-bullseye",
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {
+      "version": "latest",
+      "enableNonRootDocker": "true"
+    },
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "18"
+    }
+  },
+  "forwardPorts": [18080, 18761, 18888, 18081],
+  "portsAttributes": {
+    "18080": {
+      "label": "API Gateway (Public Backend)",
+      "onAutoForward": "notify",
+      "visibility": "public"
+    },
+    "18081": {
+      "label": "Frontend Application",
+      "onAutoForward": "openBrowser",
+      "visibility": "public"
+    },
+    "18761": {
+      "label": "Eureka Discovery Dashboard",
+      "visibility": "public"
+    },
+    "18888": {
+      "label": "Spring Cloud Config Server",
+      "visibility": "private"
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "vscjava.vscode-java-pack",
+        "ms-azuretools.vscode-docker"
+      ]
+    }
+  }
+}
