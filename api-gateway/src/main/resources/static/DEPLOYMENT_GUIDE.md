@@ -22,7 +22,7 @@ Because the Developer Portal is built with modern HTML/CSS/Vanilla JS and includ
    - **Folder**: `/docs` (or `/docs/developer-portal`)
    - Click **Save**.
 4. In ~60 seconds, GitHub will give you a live URL:
-   `https://<your-github-username>.github.io/Claims-Processing-System/developer-portal/`
+   `https://<your-username>.github.io/Insurance-Eligibility-Claims-Processing-System/developer-portal/`
 
 ---
 
@@ -51,8 +51,8 @@ When adding this project to your resume, format it cleanly with direct links:
 
 ```markdown
 Health Insurance Claims Processing System | Java, Spring Boot, Microservices, Docker, Kafka, PostgreSQL
-Developer Portal: https://<your-username>.github.io/Claims-Processing-System/developer-portal/
-GitHub: https://github.com/<your-username>/Claims-Processing-System
+Developer Portal: https://<your-username>.github.io/Insurance-Eligibility-Claims-Processing-System/developer-portal/
+GitHub: https://github.com/<your-username>/Insurance-Eligibility-Claims-Processing-System
 Postman Collection: [Download via Developer Portal]
 
 • Architected an enterprise-grade Claims Processing System across 8 microservices (Spring Cloud Gateway, Eureka, Resilience4j, Kafka, PostgreSQL).
