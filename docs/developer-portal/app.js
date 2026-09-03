@@ -745,7 +745,7 @@ function renderSidebar(filterQuery = "") {
       item.id = `nav-${ep.id}`;
       item.innerHTML = `
         <span class="badge-method badge-${ep.method.toLowerCase()}">${ep.method}</span>
-        <span class="endpoint-path" title="${ep.path}">${ep.path}</span>
+        <span class="endpoint-item-title" title="${ep.summary || ep.path}">${ep.summary || ep.path}</span>
       `;
       item.addEventListener("click", () => selectEndpoint(ep.id));
       groupEl.appendChild(item);
@@ -1035,6 +1035,9 @@ function setupEventListeners() {
     renderSidebar(e.target.value);
   });
 
+  // Custom Environment Dropdown
+  setupCustomDropdown();
+
   // Top Nav View Tabs
   document.querySelectorAll(".nav-tab").forEach(tab => {
     tab.addEventListener("click", () => {
@@ -1066,15 +1069,27 @@ function setupEventListeners() {
   document.getElementById("env-select").addEventListener("change", updateCodeSnippet);
 
   // Quick Auth Role Chips
-  document.querySelectorAll(".auth-chip").forEach(chip => {
+  document.querySelectorAll(".auth-role-btn, .auth-chip").forEach(chip => {
     chip.addEventListener("click", () => {
       const role = chip.getAttribute("data-role");
+      if (role === "clear") {
+        document.getElementById("jwt-token-input").value = "";
+        document.querySelectorAll(".auth-role-btn").forEach(b => b.classList.remove("active-role"));
+        showToast("Authorization header cleared");
+        updateCodeSnippet();
+        return;
+      }
+
+      document.querySelectorAll(".auth-role-btn").forEach(b => b.classList.remove("active-role"));
+      chip.classList.add("active-role");
+
       const simulatedTokens = {
+        user: "eyJhbGciOiJIUzUxMiJ9.claims_citizen_role_token_simulation",
         admin: "eyJhbGciOiJIUzUxMiJ9.claims_admin_role_token_simulation",
         caseworker: "eyJhbGciOiJIUzUxMiJ9.claims_caseworker_role_token_simulation",
         citizen: "eyJhbGciOiJIUzUxMiJ9.claims_citizen_role_token_simulation"
       };
-      document.getElementById("jwt-token-input").value = simulatedTokens[role] || "";
+      document.getElementById("jwt-token-input").value = simulatedTokens[role] || "eyJhbGciOiJIUzUxMiJ9.token_simulation";
       showToast(`Loaded ${role.toUpperCase()} Bearer Token`);
       updateCodeSnippet();
     });
@@ -1098,25 +1113,97 @@ function setupEventListeners() {
   }
 
   // Download Postman Collection
-  document.getElementById("btn-download-postman").addEventListener("click", () => {
-    const link = document.createElement("a");
-    link.href = "postman-collection.json";
-    link.download = "Claims-Processing-System.postman_collection.json";
-    link.click();
-    showToast("Downloading Postman Collection...");
-  });
+  const postmanBtn = document.getElementById("btn-download-postman");
+  if (postmanBtn) {
+    postmanBtn.addEventListener("click", () => {
+      showToast("Opening Postman Collection in new tab...");
+    });
+  }
 
   // Download OpenAPI Spec
-  document.getElementById("btn-download-openapi").addEventListener("click", () => {
-    const link = document.createElement("a");
-    link.href = "openapi-spec.json";
-    link.download = "claims-openapi-spec.json";
-    link.click();
-    showToast("Downloading OpenAPI 3.0 Specification...");
-  });
+  const openapiBtn = document.getElementById("btn-download-openapi");
+  if (openapiBtn) {
+    openapiBtn.addEventListener("click", () => {
+      showToast("Opening OpenAPI 3.0 Spec in new tab...");
+    });
+  }
 
   // Initialize ADR Engine
   initAdrEngine();
+}
+
+// Custom Environment Dropdown Engine
+function setupCustomDropdown() {
+  const container = document.getElementById("custom-env-dropdown");
+  const trigger = document.getElementById("env-dropdown-trigger");
+  const menu = document.getElementById("env-dropdown-menu");
+  const select = document.getElementById("env-select");
+  const label = document.getElementById("env-selected-label");
+  const dot = document.getElementById("env-status-dot");
+  if (!container || !trigger || !menu || !select) return;
+
+  const envLabels = {
+    mock: "Mock Sandbox (Simulated Engine)",
+    live: "Live Gateway (http://localhost:8080)",
+    render: "Production Cloud (Render)"
+  };
+
+  const dotClasses = {
+    mock: "",
+    live: "dot-live",
+    render: "dot-render"
+  };
+
+  trigger.addEventListener("click", (e) => {
+    e.stopPropagation();
+    const isOpen = container.classList.toggle("open");
+    trigger.setAttribute("aria-expanded", isOpen ? "true" : "false");
+  });
+
+  document.querySelectorAll(".env-dropdown-item").forEach(item => {
+    item.addEventListener("click", () => {
+      const val = item.getAttribute("data-value");
+      select.value = val;
+
+      // Update active state in menu
+      document.querySelectorAll(".env-dropdown-item").forEach(i => {
+        i.classList.remove("active");
+        i.setAttribute("aria-selected", "false");
+      });
+      item.classList.add("active");
+      item.setAttribute("aria-selected", "true");
+
+      // Update trigger label and status pulse dot
+      if (label) label.textContent = envLabels[val] || val;
+      if (dot) {
+        dot.className = `status-dot-pulse ${dotClasses[val] || ''}`.trim();
+      }
+
+      // Close dropdown
+      container.classList.remove("open");
+      trigger.setAttribute("aria-expanded", "false");
+
+      // Trigger change event for select
+      select.dispatchEvent(new Event("change"));
+      showToast(`Switched Environment to: ${item.querySelector(".env-item-title").textContent}`);
+    });
+  });
+
+  // Close when clicking outside
+  document.addEventListener("click", (e) => {
+    if (!container.contains(e.target)) {
+      container.classList.remove("open");
+      trigger.setAttribute("aria-expanded", "false");
+    }
+  });
+
+  // Close on Escape key
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && container.classList.contains("open")) {
+      container.classList.remove("open");
+      trigger.setAttribute("aria-expanded", "false");
+    }
+  });
 }
 
 // --- Architectural Decision Records (ADRs) Catalog ---

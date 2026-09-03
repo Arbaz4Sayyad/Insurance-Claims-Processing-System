@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HIS Claims Processing System - Developer Portal & API Hub</title>
+  <title>IECS - Distributed Healthcare & Claims Processing Platform</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
@@ -15,412 +15,555 @@
 
 <body>
 
-  <!-- Header / Top Bar -->
+  <!-- Header / Top Bar (Matching Reference Layout) -->
   <header class="top-bar">
     <div class="logo-group">
-      <div class="logo-badge">IECS</div>
+      <div class="logo-badge">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+        </svg>
+      </div>
       <div class="title-group">
-        <h1>Claims Processing System</h1>
-        <span>Microservices Unified Developer Portal</span>
+        <h1>IECS Portal</h1>
       </div>
     </div>
 
+    <!-- Center Navigation Tabs -->
+    <nav class="header-nav-tabs">
+      <button class="nav-tab active" data-target="view-console">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="2" y1="12" x2="22" y2="12"></line>
+          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+        </svg>
+        <span>API Explorer</span>
+      </button>
+      <button class="nav-tab" data-target="view-arch">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect>
+          <rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect>
+          <line x1="6" y1="6" x2="6.01" y2="6"></line>
+          <line x1="6" y1="18" x2="6.01" y2="18"></line>
+        </svg>
+        <span>Architecture & Flow</span>
+      </button>
+      <button class="nav-tab" data-target="view-adrs">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+          <polyline points="14 2 14 8 20 8"></polyline>
+          <line x1="16" y1="13" x2="8" y2="13"></line>
+          <line x1="16" y1="17" x2="8" y2="17"></line>
+          <polyline points="10 9 9 9 8 9"></polyline>
+        </svg>
+        <span>Engineering ADRs</span>
+      </button>
+    </nav>
+
+    <!-- Right Actions -->
     <div class="top-actions">
-      <div class="env-selector">
-        <label for="env-select">ENV:</label>
-        <select id="env-select">
+      <!-- Custom Environment Dropdown -->
+      <div class="custom-env-dropdown" id="custom-env-dropdown">
+        <select id="env-select" style="display: none;">
           <option value="mock" selected>Mock Sandbox (Simulated Engine)</option>
           <option value="live">Live Gateway (http://localhost:8080)</option>
           <option value="render">Production Cloud (Render)</option>
         </select>
+
+        <button type="button" class="env-dropdown-trigger" id="env-dropdown-trigger" aria-haspopup="listbox" aria-expanded="false">
+          <span class="status-dot-pulse" id="env-status-dot"></span>
+          <span class="env-selected-label" id="env-selected-label">Mock Sandbox (Simulated Engine)</span>
+          <svg class="dropdown-chevron-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
+        </button>
+
+        <div class="env-dropdown-menu" id="env-dropdown-menu" role="listbox">
+          <div class="env-dropdown-item active" data-value="mock" role="option" aria-selected="true">
+            <div class="env-item-left">
+              <span class="env-item-dot dot-mock"></span>
+              <div>
+                <div class="env-item-title">Mock Sandbox</div>
+                <div class="env-item-desc">Simulated In-Memory Engine</div>
+              </div>
+            </div>
+            <svg class="env-check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+          </div>
+
+          <div class="env-dropdown-item" data-value="live" role="option" aria-selected="false">
+            <div class="env-item-left">
+              <span class="env-item-dot dot-live"></span>
+              <div>
+                <div class="env-item-title">Live Gateway</div>
+                <div class="env-item-desc">http://localhost:8080</div>
+              </div>
+            </div>
+            <svg class="env-check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+          </div>
+
+          <div class="env-dropdown-item" data-value="render" role="option" aria-selected="false">
+            <div class="env-item-left">
+              <span class="env-item-dot dot-render"></span>
+              <div>
+                <div class="env-item-title">Production Cloud</div>
+                <div class="env-item-desc">Render Cloud Gateway</div>
+              </div>
+            </div>
+            <svg class="env-check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+          </div>
+        </div>
       </div>
 
-      <div class="status-pill">
-        <span class="status-dot"></span>
-        <span>All Services Active</span>
-      </div>
+      <a href="openapi-spec.json" target="_blank" rel="noopener noreferrer" id="btn-download-openapi"
+        class="btn-header-action" title="OpenAPI 3.0 Specification">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="7 10 12 15 17 10"></polyline>
+          <line x1="12" y1="15" x2="12" y2="3"></line>
+        </svg>
+        <span>OpenAPI 3.0</span>
+      </a>
 
-      <a href="https://github.com/Arbaz4Sayyad/Insurance-Eligibility-Claims-Processing-System" target="_blank" rel="noopener noreferrer"
-        class="btn-pill">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"
-          style="display:inline-block; vertical-align:text-bottom; margin-right: 2px;">
+      <a href="postman-collection.json" target="_blank" rel="noopener noreferrer" id="btn-download-postman"
+        class="btn-header-action" title="Postman Collection v2.1">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="7 10 12 15 17 10"></polyline>
+          <line x1="12" y1="15" x2="12" y2="3"></line>
+        </svg>
+        <span>Postman v2.1</span>
+      </a>
+
+      <a href="https://github.com/Arbaz4Sayyad/Insurance-Eligibility-Claims-Processing-System" target="_blank"
+        rel="noopener noreferrer" class="btn-github-icon" title="View GitHub Repository">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
           <path fill-rule="evenodd" clip-rule="evenodd"
             d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
         </svg>
-        GitHub Repo
       </a>
     </div>
   </header>
 
-  <!-- Main Split Layout -->
-  <div class="app-container">
-    <!-- Sidebar -->
-    <aside class="sidebar">
-      <div class="sidebar-search">
-        <div class="search-input-wrapper">
-          <span class="search-icon">🔍</span>
-          <input type="text" id="search-endpoints" placeholder="Filter 11 services & endpoints...">
-        </div>
-      </div>
+  <!-- Page Main Scrollable Container -->
+  <div class="main-page-scroll">
 
-      <div class="nav-tabs">
-        <button class="nav-tab active" data-target="view-console">API Explorer</button>
-        <button class="nav-tab" data-target="view-arch">Microservices</button>
-        <button class="nav-tab" data-target="view-adrs">Decisions (ADRs)</button>
-        <button class="nav-tab" data-target="view-export">Export / Specs</button>
-      </div>
+    <!-- VIEW 1: API Console & Platform Explorer -->
+    <section id="view-console" class="view-section active">
 
-      <div class="service-list" id="service-list">
-        <!-- Rendered dynamically by app.js covering all 11 microservices -->
-      </div>
-    </aside>
-
-    <!-- Main Content Area -->
-    <main class="content-pane">
-      
-      <!-- VIEW 1: API Console -->
-      <section id="view-console" class="view-section active">
-        
-        <!-- Project Overview & Layman Explanation Banner -->
-        <div class="project-overview-card">
-          <div class="project-overview-header">
-            <div class="project-tag-pill">Enterprise System Architecture</div>
-            <div class="recruiter-actions">
-              <button id="btn-download-postman" class="btn-pill btn-secondary">📥 Postman Spec</button>
-              <button id="btn-download-openapi" class="btn-pill btn-secondary">📄 OpenAPI Spec</button>
-            </div>
-          </div>
-
-          <h2 class="project-headline">Healthcare Insurance & Claims Processing System (IECS)</h2>
-          <p class="project-core-summary">
-            Engineered a distributed Healthcare Claims Processing System across 11 microservices using Spring Boot, Spring Cloud Gateway, Docker, PostgreSQL, Kafka, and Resilience4j; built an interactive Developer Portal for real-time API evaluation & automated eligibility rule validation.
+      <!-- Top Hero Section -->
+      <div class="hero-overview-wrapper">
+        <div class="hero-content-col">
+          <h2 class="hero-title">Insurance & Claims Processing System (IECS)</h2>
+          <p class="hero-description">
+            Engineered a distributed Healthcare Claims Processing System across 11 microservices using Spring Boot,
+            Spring Cloud Gateway, Docker, PostgreSQL, Kafka, and Resilience4j; built an interactive Developer Portal for
+            real-time API evaluation & automated eligibility rule validation.
           </p>
-
-          <!-- Layman Terms Feature Breakdown -->
-          <div class="layman-grid">
-            <div class="layman-item">
-              <span class="layman-icon">🏛️</span>
-              <div>
-                <strong>Welfare & Insurance Automation</strong>
-                <p>Digitizes how citizens apply for government assistance (SNAP Food Support, Medicaid, and Child Care) without manual paperwork.</p>
-              </div>
-            </div>
-
-            <div class="layman-item">
-              <span class="layman-icon">🔐</span>
-              <div>
-                <strong>Secure Registration & Privacy</strong>
-                <p>Citizens sign up securely with AES-256 encrypted SSNs and role-based permissions (Admin, Caseworker, Citizen).</p>
-              </div>
-            </div>
-
-            <div class="layman-item">
-              <span class="layman-icon">📊</span>
-              <div>
-                <strong>Income & Expense Verification</strong>
-                <p>Captures monthly salary, household dependents, and medical costs with cross-service Kafka event coordination.</p>
-              </div>
-            </div>
-
-            <div class="layman-item">
-              <span class="layman-icon">⚙️</span>
-              <div>
-                <strong>Instant Rules Engine</strong>
-                <p>Automatically evaluates income against federal poverty guidelines in milliseconds to determine eligibility & benefit amounts.</p>
-              </div>
-            </div>
-          </div>
         </div>
 
-        <!-- Selected Endpoint Header -->
-        <div class="endpoint-header">
-          <div class="endpoint-header-top">
-            <span id="selected-service-tag" class="service-tag">Service: user-service (Port 8081)</span>
+        <div class="hero-stats-grid">
+          <div class="stat-card">
+            <span class="stat-value">11 Services</span>
+            <span class="stat-label">MICROSERVICE GRID</span>
           </div>
-          <div class="endpoint-url-bar">
-            <span id="selected-method-badge" class="badge-method badge-post">POST</span>
-            <span id="selected-path-text">/api/auth/signin</span>
+          <div class="stat-card">
+            <span class="stat-value">100%</span>
+            <span class="stat-label">ELIGIBILITY ACCURACY</span>
           </div>
-          <p id="selected-desc-text" class="endpoint-desc">Authenticates citizen, caseworker, or admin credentials and
-            issues a signed JWT Bearer token.</p>
+          <div class="stat-card">
+            <span class="stat-value">50+ Tests</span>
+            <span class="stat-label">SUITE COVERAGE</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-value">&lt; 10ms</span>
+            <span class="stat-label">RULES ENGINE LATENCY</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4 Architectural Highlight Pillar Cards -->
+      <div class="pillars-grid">
+
+        <!-- Card 1: Welfare & Insurance Automation -->
+        <div class="pillar-card">
+          <div class="pillar-card-header">
+            <div class="pillar-icon-box icon-purple">
+              <span style="font-size: 18px;">🏛️</span>
+            </div>
+          </div>
+          <h3 class="pillar-title">Welfare & Insurance Automation</h3>
+          <p class="pillar-desc">
+            Digitizes how citizens apply for government assistance (SNAP Food Support, Medicaid, and Child Care) without
+            manual paperwork.
+          </p>
         </div>
 
-        <!-- Split Grid: Request Console vs Response Viewer (Symmetrical 50/50) -->
-        <div class="console-split">
-
-          <!-- Left: Request Configuration -->
-          <div class="console-card">
-            <div class="card-header">
-              <h3>Request Parameters & Auth</h3>
+        <!-- Card 2: Secure Registration & Privacy -->
+        <div class="pillar-card">
+          <div class="pillar-card-header">
+            <div class="pillar-icon-box icon-amber">
+              <span style="font-size: 18px;">🔐</span>
             </div>
-
-            <!-- Path & Query Params -->
-            <div id="params-container">
-              <!-- Dynamically populated -->
-            </div>
-
-            <!-- Authorization Header -->
-            <div class="param-group">
-              <label>Authorization Header (Bearer JWT)</label>
-              <input type="text" id="jwt-token-input" class="param-input"
-                placeholder="eyJhbGciOiJIUzUxMiJ9... (Optional)">
-              <div class="auth-helper-row">
-                <span class="auth-chip" data-role="admin">🔑 Quick Admin Token</span>
-                <span class="auth-chip" data-role="caseworker">👤 Caseworker Token</span>
-                <span class="auth-chip" data-role="citizen">👥 Citizen Token</span>
-              </div>
-            </div>
-
-            <!-- Request Body -->
-            <div id="body-editor-container" class="param-group"
-              style="margin-top: 16px; flex: 1; display: flex; flex-direction: column;">
-              <label>Request JSON Payload</label>
-              <textarea id="request-body-input" class="payload-editor" spellcheck="false"></textarea>
-            </div>
-
-            <button id="btn-send-request" class="btn-send">
-              <span>▶ Send Request</span>
-            </button>
           </div>
-
-          <!-- Right: Live Response Viewer -->
-          <div class="console-card">
-            <div class="card-header">
-              <h3>Response Inspector</h3>
-              <div class="response-status-bar">
-                <span id="resp-status-badge" class="status-badge status-2xx">200 OK</span>
-                <span id="resp-time-badge" style="color: var(--text-dim);">0 ms</span>
-              </div>
-            </div>
-
-            <pre id="response-json-viewer" class="response-viewer"></pre>
-          </div>
-
+          <h3 class="pillar-title">Secure Registration & Privacy</h3>
+          <p class="pillar-desc">
+            Citizens sign up securely with AES-256 encrypted SSNs and role-based permissions (Admin, Caseworker,
+            Citizen).
+          </p>
         </div>
 
-        <!-- Symmetrical Bottom Panel: Dynamic Code Generator -->
-        <div class="console-card snippet-card">
-          <div class="card-header">
-            <h3>Dynamic Code Generation</h3>
-            <button id="btn-copy-snippet" class="auth-chip" style="font-size: 11px;">📋 Copy Snippet</button>
+        <!-- Card 3: Income & Expense Verification -->
+        <div class="pillar-card">
+          <div class="pillar-card-header">
+            <div class="pillar-icon-box icon-blue">
+              <span style="font-size: 18px;">📊</span>
+            </div>
           </div>
-          <div class="snippet-tabs">
-            <button class="snippet-tab active" data-lang="curl">cURL</button>
-            <button class="snippet-tab" data-lang="fetch">JavaScript (Fetch)</button>
-            <button class="snippet-tab" data-lang="python">Python (Requests)</button>
-          </div>
-          <pre id="code-snippet-viewer" class="snippet-code"></pre>
+          <h3 class="pillar-title">Income & Expense Verification</h3>
+          <p class="pillar-desc">
+            Captures monthly salary, household dependents, and medical costs with cross-service Kafka event
+            coordination.
+          </p>
         </div>
 
-      </section>
+        <!-- Card 4: Instant Rules Engine -->
+        <div class="pillar-card">
+          <div class="pillar-card-header">
+            <div class="pillar-icon-box icon-emerald">
+              <span style="font-size: 18px;">⚙️</span>
+            </div>
+          </div>
+          <h3 class="pillar-title">Instant Rules Engine</h3>
+          <p class="pillar-desc">
+            Automatically evaluates income against federal poverty guidelines in milliseconds to determine eligibility &
+            benefit amounts.
+          </p>
+        </div>
 
-      <!-- VIEW 2: Architecture & System Flows -->
-      <section id="view-arch" class="view-section">
-        <div class="architecture-container">
+      </div>
 
-          <div class="arch-card">
-            <h3>🏗️ Full Topology: 11 Microservices Architecture</h3>
-            <p style="color: var(--text-muted); font-size: 13px; margin-top: 4px;">
-              Enterprise Spring Cloud Microservices ecosystem with dynamic service discovery, distributed PostgreSQL
-              databases, Kafka streaming, and Resilience4j circuit breakers.
+      <!-- Interactive API Explorer Workbench Layout -->
+      <div class="workbench-layout">
+
+        <!-- Left Sidebar: Endpoints Explorer -->
+        <aside class="workbench-sidebar">
+          <div class="sidebar-search-box">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              class="search-icon-svg">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="text" id="search-endpoints" placeholder="Search 27 endpoints & methods..." spellcheck="false"
+              autocomplete="off">
+          </div>
+
+          <div class="service-list-container" id="service-list">
+            <!-- Dynamically populated by app.js -->
+          </div>
+        </aside>
+
+        <!-- Right Main Workbench Panel -->
+        <div class="workbench-main">
+
+          <!-- Selected Endpoint Header Bar -->
+          <div class="endpoint-detail-header">
+            <div class="endpoint-path-row">
+              <span id="selected-method-badge" class="badge-method badge-post">POST</span>
+              <span id="selected-path-text" class="endpoint-path-hero">/api/v1/auth/register</span>
+            </div>
+            <p id="selected-desc-text" class="endpoint-desc-hero">
+              Registers a new user account with BCrypt password hashing and returns JWT credentials.
             </p>
+          </div>
 
-            <div class="arch-grid">
-              <div class="service-card">
-                <h4>🛡️ 1. API Gateway (Port 8080)</h4>
-                <p>Spring Cloud Gateway reverse proxy, JWT authentication validation filter, rate limiting, and global
-                  CORS.</p>
-                <span class="service-tag">Spring Cloud Gateway</span>
-              </div>
-
-              <div class="service-card">
-                <h4>🔍 2. Eureka Discovery (Port 8761)</h4>
-                <p>Netflix Eureka service registry for client-side load balancing and heartbeat health probes.</p>
-                <span class="service-tag">Netflix Eureka</span>
-              </div>
-
-              <div class="service-card">
-                <h4>⚙️ 3. Config Server (Port 8888)</h4>
-                <p>Centralized externalized configuration management across dev, test, and prod profiles.</p>
-                <span class="service-tag">Spring Cloud Config</span>
-              </div>
-
-              <div class="service-card">
-                <h4>👤 4. User Service (Port 8081)</h4>
-                <p>Authentication, BCrypt hashing, JWT issuance, and RBAC roles (ADMIN, CASEWORKER, CITIZEN).</p>
-                <span class="service-tag">Spring Security + JPA</span>
-              </div>
-
-              <div class="service-card">
-                <h4>📝 5. AR Service (Port 8082)</h4>
-                <p>Application Registration, AES-256 SSN encryption, and Transactional Outbox pattern.</p>
-                <span class="service-tag">Transactional Outbox</span>
-              </div>
-
-              <div class="service-card">
-                <h4>📊 6. DC Service (Port 8083)</h4>
-                <p>Data Collection for income, dependents, and medical expenses with OpenFeign validation & Kafka
-                  streams.</p>
-                <span class="service-tag">OpenFeign + Kafka</span>
-              </div>
-
-              <div class="service-card">
-                <h4>🧠 7. ED Service (Port 8084)</h4>
-                <p>Deterministic Eligibility Determination rules engine evaluating SNAP, Medicaid, and CCAP criteria.
-                </p>
-                <span class="service-tag">Rules Engine</span>
-              </div>
-
-              <div class="service-card">
-                <h4>💳 8. BI Service (Port 8085)</h4>
-                <p>Benefit Issuance, monthly disbursement account state machine, EBT card allocation, and audit records.
-                </p>
-                <span class="service-tag">Benefit Store</span>
-              </div>
-
-              <div class="service-card">
-                <h4>📨 9. CO Service (Port 8086)</h4>
-                <p>Correspondence Service producing PDF determination letters, notification notices, and email alerts.
-                </p>
-                <span class="service-tag">iText PDF + Mail</span>
-              </div>
-
-              <div class="service-card">
-                <h4>📱 10. Dashboard BFF (Port 8087)</h4>
-                <p>Backend-for-Frontend aggregating cross-service metrics for Citizen, Caseworker, and Admin portals.
-                </p>
-                <span class="service-tag">BFF Aggregator</span>
-              </div>
-
-              <div class="service-card">
-                <h4>📈 11. Analytics Service (Port 8088)</h4>
-                <p>Centralized distributed telemetry, 24-hour event aggregation, and system audit log ingestion.</p>
-                <span class="service-tag">Telemetry & Logs</span>
-              </div>
+          <!-- Quick Auth Roles Row -->
+          <div class="quick-auth-bar">
+            <div class="quick-auth-label">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+              </svg>
+              <span>Quick Auth Roles:</span>
+            </div>
+            <div class="quick-auth-pills">
+              <button class="auth-role-btn active-role" data-role="user">
+                <span>👤 Demo User</span>
+              </button>
+              <button class="auth-role-btn" data-role="admin">
+                <span>👑 Admin Role</span>
+              </button>
+              <button class="auth-role-btn" data-role="caseworker">
+                <span>🏛️ Caseworker Role</span>
+              </button>
+              <button class="auth-role-btn btn-clear-auth" data-role="clear">
+                <span>🧹 Clear</span>
+              </button>
             </div>
           </div>
 
-          <div class="arch-card">
-            <h3>🔄 End-to-End Claim Lifecycle Sequence</h3>
-            <div style="margin-top: 16px;">
-              <div class="flow-step">
-                <div class="flow-number">1</div>
-                <div class="flow-content">
-                  <h4>Citizen Authentication & Onboarding (User Service)</h4>
-                  <p>Citizen signs up on <code>/api/auth/signup</code> and authenticates at
-                    <code>/api/auth/signin</code> receiving a signed JWT token.
-                  </p>
+          <!-- Split Workbench: Request Configuration vs Live Response -->
+          <div class="workbench-split-grid">
+
+            <!-- Left Card: Request Configuration -->
+            <div class="console-card">
+              <div class="card-header">
+                <h3>Request Configuration</h3>
+                <span id="selected-service-tag" class="service-chip-badge">user-service :8081</span>
+              </div>
+
+              <div class="card-scroll-body">
+                <!-- Path & Query Params -->
+                <div id="params-container">
+                  <!-- Dynamically populated -->
+                </div>
+
+                <!-- Authorization Header -->
+                <div class="param-group">
+                  <label>Authorization Header (Bearer JWT / API Key)</label>
+                  <input type="text" id="jwt-token-input" class="param-input"
+                    placeholder="eyJhbGciOiJIUzUxMiJ9... (Optional)">
+                </div>
+
+                <!-- Request Body Editor -->
+                <div id="body-editor-container" class="param-group body-group">
+                  <label>Request JSON Payload</label>
+                  <textarea id="request-body-input" class="payload-editor" spellcheck="false"></textarea>
                 </div>
               </div>
 
-              <div class="flow-step">
-                <div class="flow-number">2</div>
-                <div class="flow-content">
-                  <h4>Application Registration & SSN Encryption (AR Service)</h4>
-                  <p>Citizen submits demographic details via <code>POST /api/ar/register</code>. SSN is encrypted with
-                    AES-256 and an <code>application.created</code> event is committed to the Transactional Outbox.</p>
+              <button id="btn-send-request" class="btn-execute-request">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                  <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                </svg>
+                <span>Send Request</span>
+              </button>
+            </div>
+
+            <!-- Right Card: Live Active Response -->
+            <div class="console-card">
+              <div class="card-header">
+                <h3>Active Response</h3>
+                <div class="response-status-bar">
+                  <span id="resp-status-badge" class="status-badge status-2xx">200 OK</span>
+                  <span id="resp-time-badge" class="latency-badge">12 ms</span>
                 </div>
               </div>
 
-              <div class="flow-step">
-                <div class="flow-number">3</div>
-                <div class="flow-content">
-                  <h4>Data Collection (DC Service) & Kafka Dispatch</h4>
-                  <p>Citizen inputs monthly salary, property income, household dependents, and medical expenses.
-                    Finalizing publishes a Kafka event to the eligibility pipeline.</p>
-                </div>
-              </div>
-
-              <div class="flow-step">
-                <div class="flow-number">4</div>
-                <div class="flow-content">
-                  <h4>Automated Eligibility Determination (ED Service)</h4>
-                  <p>The rules engine checks income against federal poverty level limits and plan guidelines (e.g. SNAP,
-                    Medicaid) to calculate benefit amounts.</p>
-                </div>
-              </div>
-
-              <div class="flow-step">
-                <div class="flow-number">5</div>
-                <div class="flow-content">
-                  <h4>Benefit Issuance (BI), Notices (CO) & Aggregated Dashboards</h4>
-                  <p>Approved claims trigger benefit account provisioning in BI, PDF notice creation in CO, and
-                    real-time dashboard updates across Citizen and Caseworker BFF views.</p>
-                </div>
+              <div class="response-viewer-wrapper">
+                <pre id="response-json-viewer" class="response-viewer"></pre>
               </div>
             </div>
+
           </div>
 
-      </section>
+          <!-- Bottom Panel: Dynamic Code Generation -->
+          <div class="console-card snippet-card-full">
+            <div class="card-header">
+              <h3>Dynamic Code Generation</h3>
+              <button id="btn-copy-snippet" class="btn-copy-action">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+                <span>Copy Snippet</span>
+              </button>
+            </div>
+            <div class="snippet-tabs-bar">
+              <button class="snippet-tab active" data-lang="curl">cURL</button>
+              <button class="snippet-tab" data-lang="fetch">JavaScript (Fetch)</button>
+              <button class="snippet-tab" data-lang="python">Python (Requests)</button>
+              <button class="snippet-tab" data-lang="java">Java (HttpClient)</button>
+            </div>
+            <pre id="code-snippet-viewer" class="snippet-code-box"></pre>
+          </div>
 
-      <!-- VIEW 3: Architecture Decision Records (ADRs) -->
-      <section id="view-adrs" class="view-section">
-        <div class="arch-card" style="margin-bottom: 20px;">
-          <div class="project-overview-header">
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- VIEW 2: Architecture & System Flows -->
+    <section id="view-arch" class="view-section">
+      <div class="architecture-container">
+
+        <div class="arch-card">
+          <div class="arch-header-row">
             <div>
-              <h3>📐 Architectural Decision Records (ADRs)</h3>
-              <p style="color: var(--text-muted); font-size: 13px; margin-top: 4px;">
-                Formal engineering design records documenting context, evaluated alternatives, decisions, and system trade-offs across distributed microservices.
+              <h3>🏗️ Full Topology: 11 Microservices Grid</h3>
+              <p class="arch-subtitle">
+                Enterprise Spring Cloud Microservices ecosystem with dynamic service discovery, distributed PostgreSQL
+                databases, Kafka event streaming, and Resilience4j circuit breakers.
               </p>
             </div>
-            <div class="adr-filter-pills" id="adr-filter-container">
-              <button class="auth-chip active-filter" data-adr-filter="all">All (6)</button>
-              <button class="auth-chip" data-adr-filter="Data">Data & Outbox</button>
-              <button class="auth-chip" data-adr-filter="Security">Security</button>
-              <button class="auth-chip" data-adr-filter="Messaging">Messaging</button>
-              <button class="auth-chip" data-adr-filter="Resilience">Resilience</button>
+          </div>
+
+          <div class="arch-grid">
+            <div class="service-card">
+              <h4>🛡️ 1. API Gateway (Port 8080)</h4>
+              <p>Spring Cloud Gateway reverse proxy, JWT authentication validation filter, rate limiting, and global
+                CORS.</p>
+              <span class="service-tag">Spring Cloud Gateway</span>
+            </div>
+
+            <div class="service-card">
+              <h4>🔍 2. Eureka Discovery (Port 8761)</h4>
+              <p>Netflix Eureka service registry for client-side load balancing and heartbeat health probes.</p>
+              <span class="service-tag">Netflix Eureka</span>
+            </div>
+
+            <div class="service-card">
+              <h4>⚙️ 3. Config Server (Port 8888)</h4>
+              <p>Centralized externalized configuration management across dev, test, and prod profiles.</p>
+              <span class="service-tag">Spring Cloud Config</span>
+            </div>
+
+            <div class="service-card">
+              <h4>👤 4. User Service (Port 8081)</h4>
+              <p>Authentication, BCrypt hashing, JWT issuance, and RBAC roles (ADMIN, CASEWORKER, CITIZEN).</p>
+              <span class="service-tag">Spring Security + JPA</span>
+            </div>
+
+            <div class="service-card">
+              <h4>📝 5. AR Service (Port 8082)</h4>
+              <p>Application Registration, AES-256 SSN encryption, and Transactional Outbox pattern.</p>
+              <span class="service-tag">Transactional Outbox</span>
+            </div>
+
+            <div class="service-card">
+              <h4>📊 6. DC Service (Port 8083)</h4>
+              <p>Data Collection for income, dependents, and medical expenses with OpenFeign validation & Kafka streams.
+              </p>
+              <span class="service-tag">OpenFeign + Kafka</span>
+            </div>
+
+            <div class="service-card">
+              <h4>🧠 7. ED Service (Port 8084)</h4>
+              <p>Deterministic Eligibility Determination rules engine evaluating SNAP, Medicaid, and CCAP criteria.</p>
+              <span class="service-tag">Rules Engine</span>
+            </div>
+
+            <div class="service-card">
+              <h4>💳 8. BI Service (Port 8085)</h4>
+              <p>Benefit Issuance, monthly disbursement account state machine, EBT card allocation, and audit records.
+              </p>
+              <span class="service-tag">Benefit Store</span>
+            </div>
+
+            <div class="service-card">
+              <h4>📨 9. CO Service (Port 8086)</h4>
+              <p>Correspondence Service producing PDF determination letters, notification notices, and email alerts.</p>
+              <span class="service-tag">iText PDF + Mail</span>
+            </div>
+
+            <div class="service-card">
+              <h4>📱 10. Dashboard BFF (Port 8087)</h4>
+              <p>Backend-for-Frontend aggregating cross-service metrics for Citizen, Caseworker, and Admin portals.</p>
+              <span class="service-tag">BFF Aggregator</span>
+            </div>
+
+            <div class="service-card">
+              <h4>📈 11. Analytics Service (Port 8088)</h4>
+              <p>Centralized distributed telemetry, 24-hour event aggregation, and system audit log ingestion.</p>
+              <span class="service-tag">Telemetry & Logs</span>
             </div>
           </div>
         </div>
 
-        <!-- ADR Split Viewer -->
-        <div class="adr-layout">
-          <!-- Left Column: ADR Selector Cards -->
-          <div class="adr-sidebar" id="adr-list-container">
-            <!-- Rendered dynamically by app.js -->
-          </div>
-
-          <!-- Right Column: Active ADR Detailed Specification Document -->
-          <div class="console-card adr-detail-pane" id="adr-detail-container">
-            <!-- Rendered dynamically by app.js -->
-          </div>
-        </div>
-      </section>
-
-      <!-- VIEW 4: Export & Specs -->
-      <section id="view-export" class="view-section">
         <div class="arch-card">
-          <h3>📦 API Specifications & Integration Assets</h3>
-          <p style="color: var(--text-muted); font-size: 13px; margin-top: 6px;">
-            Download industry-standard API specifications for seamless integration into Postman, Swagger UI, Insomnia,
-            or CI/CD automated contract test suites.
-          </p>
-
-          <div class="arch-grid" style="margin-top: 24px;">
-            <div class="service-card">
-              <h4>📮 Postman Collection (v2.1)</h4>
-              <p>Contains all pre-configured microservices requests, environment variables (`{{baseUrl}}`,
-                `{{jwtToken}}`), and sample JSON bodies.</p>
-              <a href="postman-collection.json" download="Claims-Processing-System.postman_collection.json"
-                class="btn-pill" style="margin-top: 10px;">
-                Download Postman Collection (.json)
-              </a>
+          <h3>🔄 End-to-End Claim Lifecycle Sequence</h3>
+          <div class="flow-steps-list">
+            <div class="flow-step">
+              <div class="flow-number">1</div>
+              <div class="flow-content">
+                <h4>Citizen Authentication & Onboarding (User Service)</h4>
+                <p>Citizen signs up on <code>/api/auth/signup</code> and authenticates at
+                  <code>/api/auth/signin</code> receiving a signed JWT token.
+                </p>
+              </div>
             </div>
 
-            <div class="service-card">
-              <h4>📄 OpenAPI 3.0 Specification</h4>
-              <p>Full OpenAPI 3.0 JSON specification describing all path operations, request bodies, query params,
-                schemas, and HTTP status codes.</p>
-              <a href="openapi-spec.json" download="claims-openapi-spec.json" class="btn-pill"
-                style="margin-top: 10px;">
-                Download OpenAPI Spec (.json)
-              </a>
+            <div class="flow-step">
+              <div class="flow-number">2</div>
+              <div class="flow-content">
+                <h4>Application Registration & SSN Encryption (AR Service)</h4>
+                <p>Citizen submits demographic details via <code>POST /api/ar/register</code>. SSN is encrypted with
+                  AES-256 and an <code>application.created</code> event is committed to the Transactional Outbox.</p>
+              </div>
+            </div>
+
+            <div class="flow-step">
+              <div class="flow-number">3</div>
+              <div class="flow-content">
+                <h4>Data Collection (DC Service) & Kafka Dispatch</h4>
+                <p>Citizen inputs monthly salary, property income, household dependents, and medical expenses.
+                  Finalizing publishes a Kafka event to the eligibility pipeline.</p>
+              </div>
+            </div>
+
+            <div class="flow-step">
+              <div class="flow-number">4</div>
+              <div class="flow-content">
+                <h4>Automated Eligibility Determination (ED Service)</h4>
+                <p>The rules engine checks income against federal poverty level limits and plan guidelines (e.g. SNAP,
+                  Medicaid) to calculate benefit amounts.</p>
+              </div>
+            </div>
+
+            <div class="flow-step">
+              <div class="flow-number">5</div>
+              <div class="flow-content">
+                <h4>Benefit Issuance (BI), Notices (CO) & Aggregated Dashboards</h4>
+                <p>Approved claims trigger benefit account provisioning in BI, PDF notice creation in CO, and
+                  real-time dashboard updates across Citizen and Caseworker BFF views.</p>
+              </div>
             </div>
           </div>
         </div>
-      </section>
 
-    </main>
+      </div>
+    </section>
+
+    <!-- VIEW 3: Architecture Decision Records (ADRs) -->
+    <section id="view-adrs" class="view-section">
+      <div class="arch-card" style="margin-bottom: 20px;">
+        <div class="project-overview-header">
+          <div>
+            <h3>📐 Architectural Decision Records (ADRs)</h3>
+            <p class="arch-subtitle">
+              Formal engineering design records documenting context, evaluated alternatives, decisions, and system
+              trade-offs across distributed microservices.
+            </p>
+          </div>
+          <div class="adr-filter-pills" id="adr-filter-container">
+            <button class="auth-role-btn active-filter" data-adr-filter="all">All (6)</button>
+            <button class="auth-role-btn" data-adr-filter="Data">Data & Outbox</button>
+            <button class="auth-role-btn" data-adr-filter="Security">Security</button>
+            <button class="auth-role-btn" data-adr-filter="Messaging">Messaging</button>
+            <button class="auth-role-btn" data-adr-filter="Resilience">Resilience</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ADR Split Viewer -->
+      <div class="adr-layout">
+        <!-- Left Column: ADR Selector Cards -->
+        <div class="adr-sidebar" id="adr-list-container">
+          <!-- Rendered dynamically by app.js -->
+        </div>
+
+        <!-- Right Column: Active ADR Detailed Specification Document -->
+        <div class="console-card adr-detail-pane" id="adr-detail-container">
+          <!-- Rendered dynamically by app.js -->
+        </div>
+      </div>
+    </section>
+
   </div>
 
   <!-- Toast Notification -->
