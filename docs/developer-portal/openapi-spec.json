@@ -1,0 +1,353 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Health Insurance System (HIS) - Claims Processing API",
+    "description": "Enterprise Microservices Architecture covering 11 services: API Gateway, Eureka, Config Server, User Service, AR Service, DC Service, ED Service, BI Service, CO Service, Analytics Service, and Dashboard Aggregator BFF.",
+    "version": "1.0.0",
+    "contact": {
+      "name": "HIS Engineering Team",
+      "url": "https://github.com/Arbaz4Sayyad/Claims-Processing-System"
+    }
+  },
+  "servers": [
+    { "url": "http://localhost:8080", "description": "API Gateway (Local Development)" },
+    { "url": "https://claims-processing-gateway.onrender.com", "description": "Production API Gateway (Render Cloud)" }
+  ],
+  "tags": [
+    { "name": "Authentication & Users", "description": "JWT authentication, user registration, profile management, and Caseworker provisioning" },
+    { "name": "Application Registration (AR)", "description": "Citizen identity onboarding, SSN encryption, and Outbox event persistence" },
+    { "name": "Data Collection (DC)", "description": "Income, household composition, and monthly expense capture with Kafka streaming" },
+    { "name": "Eligibility Determination (ED)", "description": "Rules-based automated plan eligibility determination engine" },
+    { "name": "Benefit Issuance (BI)", "description": "Benefit account allocation and disbursement tracking" },
+    { "name": "Correspondence (CO)", "description": "Citizen notification notices and PDF generation trigger" },
+    { "name": "Analytics & Telemetry", "description": "Centralized system audit logs and 24-hour event stream metrics" },
+    { "name": "Dashboard Aggregator (BFF)", "description": "Unified aggregation for Citizen, Caseworker, and Admin portals" },
+    { "name": "API Gateway Actuator", "description": "Health probes, Prometheus metrics, and gateway route registry" }
+  ],
+  "paths": {
+    "/api/auth/signin": {
+      "post": {
+        "tags": ["Authentication & Users"],
+        "summary": "Authenticate user & retrieve JWT token",
+        "operationId": "authenticateUser",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["username", "password"],
+                "properties": {
+                  "username": { "type": "string", "example": "admin" },
+                  "password": { "type": "string", "example": "Admin@123" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Authentication successful" }
+        }
+      }
+    },
+    "/api/auth/signup": {
+      "post": {
+        "tags": ["Authentication & Users"],
+        "summary": "Register a new citizen account",
+        "operationId": "registerUser",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["username", "email", "password"],
+                "properties": {
+                  "username": { "type": "string", "example": "john_doe" },
+                  "email": { "type": "string", "format": "email", "example": "john.doe@example.com" },
+                  "password": { "type": "string", "example": "SecurePass@123" },
+                  "role": { "type": "array", "items": { "type": "string" }, "example": ["ROLE_USER"] }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "User created successfully" }
+        }
+      }
+    },
+    "/api/users": {
+      "get": {
+        "tags": ["Authentication & Users"],
+        "summary": "List all users by role (Admin)",
+        "operationId": "getAllUsers",
+        "security": [{ "BearerAuth": [] }],
+        "parameters": [
+          { "name": "role", "in": "query", "schema": { "type": "string" }, "example": "CASE_WORKER" }
+        ],
+        "responses": {
+          "200": { "description": "Users retrieved successfully" }
+        }
+      }
+    },
+    "/api/users/create-caseworker": {
+      "post": {
+        "tags": ["Authentication & Users"],
+        "summary": "Provision new caseworker (Admin)",
+        "operationId": "createCaseworker",
+        "security": [{ "BearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": { "type": "string", "example": "cw_miller" },
+                  "email": { "type": "string", "example": "cw.miller@his.gov" },
+                  "password": { "type": "string", "example": "SecureCW@2026" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Caseworker created" }
+        }
+      }
+    },
+    "/api/ar/register": {
+      "post": {
+        "tags": ["Application Registration (AR)"],
+        "summary": "Register Citizen Application with SSN Validation & Outbox Event",
+        "operationId": "registerApplication",
+        "security": [{ "BearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["firstName", "lastName", "dob", "gender", "ssn"],
+                "properties": {
+                  "firstName": { "type": "string", "example": "Sarah" },
+                  "lastName": { "type": "string", "example": "Connor" },
+                  "dob": { "type": "string", "format": "date", "example": "1990-05-15" },
+                  "gender": { "type": "string", "enum": ["MALE", "FEMALE", "OTHER"], "example": "FEMALE" },
+                  "ssn": { "type": "string", "example": "666-12-3456" },
+                  "userId": { "type": "integer", "example": 1 }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Application registered" }
+        }
+      }
+    },
+    "/api/ar/all": {
+      "get": {
+        "tags": ["Application Registration (AR)"],
+        "summary": "Retrieve paginated list of applications",
+        "operationId": "getAllApplications",
+        "security": [{ "BearerAuth": [] }],
+        "responses": {
+          "200": { "description": "Applications retrieved successfully" }
+        }
+      }
+    },
+    "/api/ar/plans": {
+      "get": {
+        "tags": ["Application Registration (AR)"],
+        "summary": "List all active insurance plans",
+        "operationId": "getAllPlans",
+        "responses": {
+          "200": { "description": "List of benefit plans" }
+        }
+      }
+    },
+    "/api/dc/case/{appId}": {
+      "post": {
+        "tags": ["Data Collection (DC)"],
+        "summary": "Initialize data collection case (Feign Client check)",
+        "operationId": "createDcCase",
+        "security": [{ "BearerAuth": [] }],
+        "parameters": [
+          { "name": "appId", "in": "path", "required": true, "schema": { "type": "integer" }, "example": 1001 }
+        ],
+        "responses": {
+          "200": { "description": "Case initialized" }
+        }
+      }
+    },
+    "/api/dc/income/{appId}": {
+      "post": {
+        "tags": ["Data Collection (DC)"],
+        "summary": "Record monthly income details for case",
+        "operationId": "addIncomeRecord",
+        "security": [{ "BearerAuth": [] }],
+        "parameters": [
+          { "name": "appId", "in": "path", "required": true, "schema": { "type": "integer" }, "example": 1001 }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "monthlySalary": { "type": "number", "example": 2500.00 },
+                  "rentIncome": { "type": "number", "example": 0.00 },
+                  "propertyIncome": { "type": "number", "example": 150.00 }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Income added successfully" }
+        }
+      }
+    },
+    "/api/dc/complete/{appId}": {
+      "post": {
+        "tags": ["Data Collection (DC)"],
+        "summary": "Finalize DC & Publish Kafka event to ED Engine",
+        "operationId": "completeDataCollection",
+        "security": [{ "BearerAuth": [] }],
+        "parameters": [
+          { "name": "appId", "in": "path", "required": true, "schema": { "type": "integer" }, "example": 1001 }
+        ],
+        "responses": {
+          "200": { "description": "Data collection marked complete" }
+        }
+      }
+    },
+    "/api/ed/determine/{appId}": {
+      "post": {
+        "tags": ["Eligibility Determination (ED)"],
+        "summary": "Run business rules engine to determine plan eligibility",
+        "operationId": "determineEligibility",
+        "security": [{ "BearerAuth": [] }],
+        "parameters": [
+          { "name": "appId", "in": "path", "required": true, "schema": { "type": "integer" }, "example": 1001 }
+        ],
+        "responses": {
+          "200": { "description": "Eligibility evaluated" }
+        }
+      }
+    },
+    "/api/bi/status/{appId}": {
+      "get": {
+        "tags": ["Benefit Issuance (BI)"],
+        "summary": "Check monthly benefit issuance status for application",
+        "operationId": "getBenefitStatus",
+        "security": [{ "BearerAuth": [] }],
+        "parameters": [
+          { "name": "appId", "in": "path", "required": true, "schema": { "type": "integer" }, "example": 1001 }
+        ],
+        "responses": {
+          "200": { "description": "Benefit account status" }
+        }
+      }
+    },
+    "/api/notifications": {
+      "get": {
+        "tags": ["Correspondence (CO)"],
+        "summary": "List citizen correspondence notices & letters",
+        "operationId": "getAllNotifications",
+        "security": [{ "BearerAuth": [] }],
+        "responses": {
+          "200": { "description": "List of notices" }
+        }
+      }
+    },
+    "/api/analytics/history": {
+      "get": {
+        "tags": ["Analytics & Telemetry"],
+        "summary": "Get 24-hour telemetry event stream",
+        "operationId": "getAnalyticsHistory",
+        "security": [{ "BearerAuth": [] }],
+        "responses": {
+          "200": { "description": "24-hour telemetry data" }
+        }
+      }
+    },
+    "/api/analytics/logs": {
+      "get": {
+        "tags": ["Analytics & Telemetry"],
+        "summary": "Get latest 50 system audit logs",
+        "operationId": "getSystemLogs",
+        "security": [{ "BearerAuth": [] }],
+        "responses": {
+          "200": { "description": "System audit logs retrieved" }
+        }
+      }
+    },
+    "/api/dashboard/citizen": {
+      "get": {
+        "tags": ["Dashboard Aggregator (BFF)"],
+        "summary": "Fetch aggregated dashboard overview for citizen",
+        "operationId": "getCitizenDashboard",
+        "security": [{ "BearerAuth": [] }],
+        "responses": {
+          "200": { "description": "Aggregated citizen overview data" }
+        }
+      }
+    },
+    "/api/dashboard/caseworker": {
+      "get": {
+        "tags": ["Dashboard Aggregator (BFF)"],
+        "summary": "Fetch caseworker task queues and workload metrics",
+        "operationId": "getCaseworkerDashboard",
+        "security": [{ "BearerAuth": [] }],
+        "responses": {
+          "200": { "description": "Caseworker metrics" }
+        }
+      }
+    },
+    "/api/dashboard/admin": {
+      "get": {
+        "tags": ["Dashboard Aggregator (BFF)"],
+        "summary": "Fetch admin system-wide governance metrics",
+        "operationId": "getAdminDashboard",
+        "security": [{ "BearerAuth": [] }],
+        "responses": {
+          "200": { "description": "Admin overview data" }
+        }
+      }
+    },
+    "/actuator/health": {
+      "get": {
+        "tags": ["API Gateway Actuator"],
+        "summary": "Spring Boot liveness & health probe",
+        "operationId": "getHealth",
+        "responses": {
+          "200": { "description": "System is UP" }
+        }
+      }
+    },
+    "/actuator/gateway/routes": {
+      "get": {
+        "tags": ["API Gateway Actuator"],
+        "summary": "Get active gateway dynamic route table",
+        "operationId": "getGatewayRoutes",
+        "security": [{ "BearerAuth": [] }],
+        "responses": {
+          "200": { "description": "Active routes list" }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}

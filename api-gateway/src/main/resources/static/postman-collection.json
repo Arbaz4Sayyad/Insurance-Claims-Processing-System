@@ -1,0 +1,282 @@
+{
+  "info": {
+    "name": "Claims Processing System (HIS) API - 11 Microservices",
+    "description": "Production API Collection for Health Insurance Claims Processing Microservices Ecosystem covering all 11 services.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8080", "type": "string" },
+    { "key": "jwtToken", "value": "", "type": "string" },
+    { "key": "sampleAppId", "value": "1001", "type": "string" }
+  ],
+  "item": [
+    {
+      "name": "1. Authentication & Users",
+      "item": [
+        {
+          "name": "POST Signin (Admin / User)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/auth/signin", "host": ["{{baseUrl}}"], "path": ["api", "auth", "signin"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"admin\",\n  \"password\": \"Admin@123\"\n}"
+            }
+          }
+        },
+        {
+          "name": "POST Register User",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/auth/signup", "host": ["{{baseUrl}}"], "path": ["api", "auth", "signup"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"sarah_connor\",\n  \"email\": \"sarah.connor@example.com\",\n  \"password\": \"Password@123\",\n  \"role\": [\"ROLE_USER\"]\n}"
+            }
+          }
+        },
+        {
+          "name": "GET Users by Role (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{jwtToken}}" }],
+            "url": { "raw": "{{baseUrl}}/api/users?role=CASE_WORKER", "host": ["{{baseUrl}}"], "path": ["api", "users"], "query": [{ "key": "role", "value": "CASE_WORKER" }] }
+          }
+        },
+        {
+          "name": "GET User Statistics",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{jwtToken}}" }],
+            "url": { "raw": "{{baseUrl}}/api/users/stats/counts", "host": ["{{baseUrl}}"], "path": ["api", "users", "stats", "counts"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Application Registration (AR)",
+      "item": [
+        {
+          "name": "POST Register Citizen Application",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{jwtToken}}" }
+            ],
+            "url": { "raw": "{{baseUrl}}/api/ar/register", "host": ["{{baseUrl}}"], "path": ["api", "ar", "register"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"Sarah\",\n  \"lastName\": \"Connor\",\n  \"dob\": \"1990-05-15\",\n  \"gender\": \"FEMALE\",\n  \"ssn\": \"666-12-3456\",\n  \"userId\": 1\n}"
+            }
+          }
+        },
+        {
+          "name": "GET All Applications",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{jwtToken}}" }],
+            "url": { "raw": "{{baseUrl}}/api/ar/all?status=PENDING&page=0&size=10", "host": ["{{baseUrl}}"], "path": ["api", "ar", "all"], "query": [{ "key": "status", "value": "PENDING" }, { "key": "page", "value": "0" }, { "key": "size", "value": "10" }] }
+          }
+        },
+        {
+          "name": "GET Application by ID",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{jwtToken}}" }],
+            "url": { "raw": "{{baseUrl}}/api/ar/{{sampleAppId}}", "host": ["{{baseUrl}}"], "path": ["api", "ar", "{{sampleAppId}}"] }
+          }
+        },
+        {
+          "name": "GET All Benefit Plans",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/ar/plans", "host": ["{{baseUrl}}"], "path": ["api", "ar", "plans"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Data Collection (DC)",
+      "item": [
+        {
+          "name": "POST Create Case for Application",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{jwtToken}}" }],
+            "url": { "raw": "{{baseUrl}}/api/dc/case/{{sampleAppId}}", "host": ["{{baseUrl}}"], "path": ["api", "dc", "case", "{{sampleAppId}}"] }
+          }
+        },
+        {
+          "name": "POST Add Monthly Income",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{jwtToken}}" }
+            ],
+            "url": { "raw": "{{baseUrl}}/api/dc/income/{{sampleAppId}}", "host": ["{{baseUrl}}"], "path": ["api", "dc", "income", "{{sampleAppId}}"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"monthlySalary\": 2400.00,\n  \"rentIncome\": 0.00,\n  \"propertyIncome\": 120.00\n}"
+            }
+          }
+        },
+        {
+          "name": "POST Add Household Member",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{jwtToken}}" }
+            ],
+            "url": { "raw": "{{baseUrl}}/api/dc/household/{{sampleAppId}}", "host": ["{{baseUrl}}"], "path": ["api", "dc", "household", "{{sampleAppId}}"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"John Connor\",\n  \"dob\": \"2015-02-28\",\n  \"ssn\": \"666-44-3322\",\n  \"relationship\": \"CHILD\"\n}"
+            }
+          }
+        },
+        {
+          "name": "POST Add Monthly Expense",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{jwtToken}}" }
+            ],
+            "url": { "raw": "{{baseUrl}}/api/dc/expense/{{sampleAppId}}", "host": ["{{baseUrl}}"], "path": ["api", "dc", "expense", "{{sampleAppId}}"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"housingExpense\": 950.00,\n  \"utilityExpense\": 180.00,\n  \"medicalExpense\": 220.00\n}"
+            }
+          }
+        },
+        {
+          "name": "POST Complete Data Collection",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{jwtToken}}" }],
+            "url": { "raw": "{{baseUrl}}/api/dc/complete/{{sampleAppId}}", "host": ["{{baseUrl}}"], "path": ["api", "dc", "complete", "{{sampleAppId}}"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Eligibility Determination (ED)",
+      "item": [
+        {
+          "name": "POST Determine Eligibility",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{jwtToken}}" }],
+            "url": { "raw": "{{baseUrl}}/api/ed/determine/{{sampleAppId}}", "host": ["{{baseUrl}}"], "path": ["api", "ed", "determine", "{{sampleAppId}}"] }
+          }
+        },
+        {
+          "name": "GET Eligibility Engine Stats",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/ed/stats", "host": ["{{baseUrl}}"], "path": ["api", "ed", "stats"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. Benefit Issuance (BI) & Correspondence (CO)",
+      "item": [
+        {
+          "name": "GET Benefit Issuance Status",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{jwtToken}}" }],
+            "url": { "raw": "{{baseUrl}}/api/bi/status/{{sampleAppId}}", "host": ["{{baseUrl}}"], "path": ["api", "bi", "status", "{{sampleAppId}}"] }
+          }
+        },
+        {
+          "name": "GET Citizen Notifications",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{jwtToken}}" }],
+            "url": { "raw": "{{baseUrl}}/api/notifications", "host": ["{{baseUrl}}"], "path": ["api", "notifications"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "6. Analytics & Telemetry",
+      "item": [
+        {
+          "name": "GET Analytics 24h Event Stream",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{jwtToken}}" }],
+            "url": { "raw": "{{baseUrl}}/api/analytics/history", "host": ["{{baseUrl}}"], "path": ["api", "analytics", "history"] }
+          }
+        },
+        {
+          "name": "GET Top 50 System Audit Logs",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{jwtToken}}" }],
+            "url": { "raw": "{{baseUrl}}/api/analytics/logs", "host": ["{{baseUrl}}"], "path": ["api", "analytics", "logs"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "7. Dashboard Aggregator (BFF)",
+      "item": [
+        {
+          "name": "GET Citizen Dashboard Overview",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{jwtToken}}" },
+              { "key": "X-User-Id", "value": "1" }
+            ],
+            "url": { "raw": "{{baseUrl}}/api/dashboard/citizen", "host": ["{{baseUrl}}"], "path": ["api", "dashboard", "citizen"] }
+          }
+        },
+        {
+          "name": "GET Caseworker Dashboard Metrics",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{jwtToken}}" }],
+            "url": { "raw": "{{baseUrl}}/api/dashboard/caseworker", "host": ["{{baseUrl}}"], "path": ["api", "dashboard", "caseworker"] }
+          }
+        },
+        {
+          "name": "GET Admin Governance Metrics",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{jwtToken}}" }],
+            "url": { "raw": "{{baseUrl}}/api/dashboard/admin", "host": ["{{baseUrl}}"], "path": ["api", "dashboard", "admin"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "8. API Gateway Actuator",
+      "item": [
+        {
+          "name": "GET Actuator Health Probe",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/actuator/health", "host": ["{{baseUrl}}"], "path": ["actuator", "health"] }
+          }
+        },
+        {
+          "name": "GET Dynamic Gateway Route Table",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{jwtToken}}" }],
+            "url": { "raw": "{{baseUrl}}/actuator/gateway/routes", "host": ["{{baseUrl}}"], "path": ["actuator", "gateway", "routes"] }
+          }
+        }
+      ]
+    }
+  ]
+}
